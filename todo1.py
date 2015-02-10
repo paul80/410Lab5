@@ -51,13 +51,31 @@ def logout():
 def delete():
     if not session.get('logged_in'):
         abort(401)
-    removetask(request.form['category'], request.form['priority'], request.form['description'])
+    #removetask(request.form['category'], request.form['priority'], request.form['description'])
+    for task in request.form:
+        print(task)
+        removetask(task) 
     flash("Task deleted successfully")
     return redirect (url_for('task'))
 
-def removetask(category,priority,description):
-    query_db('delete from tasks where category=? and priority=? and description=?', [category, int(priority), description], one=True)
+'''
+@app.route('/edit', methods=['GET','POST'])
+def edit():
+    edit_task(removetask(request.form['category'], request.form['priority'], request.form['description']))
+    flash("task edited")
+    return redirect (url_for('task'))
+'''
+'''
+def edit_task(category, priority, description):
+'''
+
+def removetask(task):
+    #query_db('delete from tasks where category=? and priority=? and description=?', [category, int(priority), description], one=True)
+    query_db('delete from tasks where id=?', [task], one=True)
+    #query_db('delete from tasks where category=? and priority=? and description=?', [category, int(priority), description], one=True)
+    
     get_db().commit()
+
 
 def addTask(category,priority,description):
     query_db('insert into tasks(category, priority, description) values (?,?,?)', [category, int(priority), description], one=True)
